@@ -42,8 +42,10 @@ public class ControllerProduct {
     @PutMapping("/products/{id}")
     public ResponseEntity<?> updateProduct(@RequestBody Producto product, @PathVariable Integer id){
         try {
-            Producto productoExistente = productService.getProductsById(id);
-            productService.saveproduct(product);
+            Producto productoActual = productService.getProductsById(id);
+            productoActual.setName(product.getName());
+            productoActual.setPrice(product.getPrice());
+            productService.saveproduct(productoActual);
             return new ResponseEntity<Producto>(HttpStatus.OK);
         }catch (Exception e){
             return  new ResponseEntity<Producto>(HttpStatus.NOT_FOUND);
