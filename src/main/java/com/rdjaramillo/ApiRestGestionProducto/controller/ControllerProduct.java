@@ -3,11 +3,11 @@ package com.rdjaramillo.ApiRestGestionProducto.controller;
 import com.rdjaramillo.ApiRestGestionProducto.entity.Producto;
 import com.rdjaramillo.ApiRestGestionProducto.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @RestController
@@ -20,9 +20,40 @@ public class ControllerProduct {
          return productService.listProducts();
      }
 
-    @GetMapping("/products/{id}")
+    /*@GetMapping("/products/{id}")
     public Producto getProductById(@PathVariable Integer id){
         return productService.getProductsById(id);
+    }*/
+    @GetMapping("/products/{id}")
+    public ResponseEntity<Producto> getProductById(@PathVariable Integer id){
+        try {
+           Producto product = productService.getProductsById(id);
+           return new ResponseEntity<Producto>(product, HttpStatus.OK);
+        }catch (Exception e){
+            return  new ResponseEntity<Producto>(HttpStatus.NOT_FOUND);
+        }
     }
 
+    @PostMapping("/products")
+    public void saveProduct(@RequestBody Producto producto){
+        productService.saveproduct(producto);
+    }
+
+    @PutMapping("/products/{id}")
+    public ResponseEntity<?> updateProduct(@RequestBody Producto product, @PathVariable Integer id){
+        try {
+            Producto productoExistente = productService.getProductsById(id);
+            productService.saveproduct(product);
+            return new ResponseEntity<Producto>(HttpStatus.OK);
+        }catch (Exception e){
+            return  new ResponseEntity<Producto>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/products/{id}")
+    public void deleteProduct(@PathVariable Integer id){
+        productService.deleteproduct(id);
+
+    }
 }
+
