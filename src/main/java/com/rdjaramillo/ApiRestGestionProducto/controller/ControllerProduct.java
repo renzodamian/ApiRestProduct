@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @RestController
@@ -20,10 +19,7 @@ public class ControllerProduct {
          return productService.listProducts();
      }
 
-    /*@GetMapping("/products/{id}")
-    public Producto getProductById(@PathVariable Integer id){
-        return productService.getProductsById(id);
-    }*/
+
     @GetMapping("/products/{id}")
     public ResponseEntity<Producto> getProductById(@PathVariable Integer id){
         try {
@@ -40,6 +36,7 @@ public class ControllerProduct {
     }
 
     @PutMapping("/products/{id}")
+    //<?> Cualquier tipo de datos
     public ResponseEntity<?> updateProduct(@RequestBody Producto product, @PathVariable Integer id){
         try {
             Producto productoActual = productService.getProductsById(id);
